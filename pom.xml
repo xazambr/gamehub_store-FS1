@@ -21,8 +21,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <packaging>pom</packaging>
     <modules>
         <module>msvc-auth</module>
+        <module>msvc-users</module>
     </modules>
 
 </project>
