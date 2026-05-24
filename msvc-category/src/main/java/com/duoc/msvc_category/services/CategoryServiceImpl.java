@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Categoria update(Long id, Categoria categoria) {
+    public Categoria updateById(Long id, Categoria categoria) {
         return null;
     }
 }
