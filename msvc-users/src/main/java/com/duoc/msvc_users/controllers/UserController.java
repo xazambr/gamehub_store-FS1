@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/usuarios")
+@RequestMapping("/api/v1/usuarios")
 @Validated
 public class UserController {
     @Autowired
