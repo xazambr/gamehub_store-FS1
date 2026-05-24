@@ -25,6 +25,8 @@
     <modules>
         <module>msvc-auth</module>
         <module>msvc-users</module>
+        <module>msvc-product</module>
+        <module>msvc-category</module>
     </modules>
 
 </project>
