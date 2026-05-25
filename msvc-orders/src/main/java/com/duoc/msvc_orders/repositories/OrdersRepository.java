@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface OrdersRepository extends JpaRepository<Ordenes, Long> {
 
-    // Busca filtrando por el estado
+    // Buscar filtrando el estado
     List<Ordenes> findByEstado(String estado);
 
-    // Busca las órdenes por ID
+    // Buscar órdenes por ID
     List<Ordenes> findByUsuarioId(Long usuarioId);
 }

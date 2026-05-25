@@ -43,26 +43,24 @@ public class Ordenes {
 
     @NotNull(message = "La fecha de creación no puede ser nula")
     @Column(nullable = false, updatable = false)
-    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechCreacion;
 
-    @Column
+    @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
 
-    @Column
-    private String empresaTransporte; // Starken, Chilexpress
+    @Column(name = "empresa_transporte")
+    private String empresaTransporte;
 
-    @Column
-    private String numeroSeguimiento; // Número de seguimiento
+    @Column(name = "numero_seguimiento")
+    private String numeroSeguimiento;
 
-    @Column
+    @Column(name = "motivo_cancelacion")
     private String motivoCancelacion;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "orden_juegos", joinColumns = @JoinColumn(name = "orden_id"))
-    @Column(name = "juego_id")
-    private List<Long> juegosIds; // Lista de juegos seleccionados
+    @CollectionTable(name = "orden_juegos", joinColumns = @JoinColumn(name = "id_orden"))
+    @Column(name = "id_juego")
+    private List<Long> juegosIds;
 
-    public Boolean esEditable() {
-        return estado.equalsIgnoreCase("creada");
-    }
+
 }

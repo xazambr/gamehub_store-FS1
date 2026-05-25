@@ -17,8 +17,6 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
-    // Crear una nueva orden
-
     @PostMapping
     public ResponseEntity<Ordenes> crearOrden(@Valid @RequestBody Ordenes orden) {
         Ordenes resultado = this.ordersService.crear(orden);
@@ -32,14 +30,14 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
-    // Buscar una orden por su ID
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Ordenes> obtenerPorId(@PathVariable Long id) {
         return this.ordersService.buscarPorId(id).map(resultado -> ResponseEntity.status(HttpStatus.OK).body(resultado)).orElse(ResponseEntity.notFound().build());
     }
 
-    // Listar órdenes filtradas por Cliente (usuarioId)
+    // filtrar órdenes por Cliente (usuarioId)
 
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Ordenes>> listarPorUsuario(@PathVariable Long usuarioId) {
@@ -47,7 +45,7 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
-    //Listar órdenes filtradas por Estado (creada, pagada, etc.)
+    //Listar órdenes por Estado (creada, pagada, etc.)
 
     @GetMapping("/estado/{estado}")
     public ResponseEntity<List<Ordenes>> listarPorEstado(@PathVariable String estado) {
@@ -55,7 +53,7 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
-    // Actualizar el estado de la orden
+    // Actualizar estado de orden
 
     @PutMapping("/{id}/estado")
     public ResponseEntity<Ordenes> actualizarEstado(@PathVariable Long id, @RequestParam String estado) {

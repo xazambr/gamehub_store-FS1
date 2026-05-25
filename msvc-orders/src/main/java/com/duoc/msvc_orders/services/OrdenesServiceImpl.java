@@ -44,7 +44,7 @@ public class OrdenesServiceImpl implements OrdersService {
     @Override
     public Ordenes crear(Ordenes orden) {
         orden.setEstado("creada");
-        orden.setFechaCreacion(LocalDateTime.now());
+        orden.setFechCreacion(LocalDateTime.now());
 
         if (orden.getTotal() == null) {
             orden.setTotal(0.0);
