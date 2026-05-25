@@ -1,5 +1,6 @@
 package com.duoc.msvc_auth.services;
 
+import com.duoc.msvc_auth.clients.UsuarioClient;
 import com.duoc.msvc_auth.exceptions.AuthExceptions;
 import com.duoc.msvc_auth.models.CuentaAcceso;
 import com.duoc.msvc_auth.repositories.AuthRepository;
@@ -15,6 +16,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private AuthRepository authRepository;
+
+    @Autowired
+    private UsuarioClient usuarioClient;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

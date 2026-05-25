@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario findById(Long id) {
         return this.userRepository.findById(id).orElseThrow(
-                () -> new UserExceptions("El usuario con id: "+id+ "no existe")
+                () -> new UserExceptions("El usuario con id: "+id+ " no existe")
         );
     }
 
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario findByEmail(String email) {
         return this.userRepository.findByEmail(email).orElseThrow(
-                () -> new UserExceptions("El usuario con email: "+email+ "no existe")
+                () -> new UserExceptions("El usuario con email: "+email+ " no existe")
         );
     }
 
