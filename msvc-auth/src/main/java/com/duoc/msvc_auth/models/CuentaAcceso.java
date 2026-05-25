@@ -37,6 +37,10 @@ public class CuentaAcceso {
     @Column(nullable = false)
     private String rol;
 
+    @NotBlank
+    @Column
+    private boolean activo;
+
     @Column
     @CreatedDate
     private Date fechaCreacion;

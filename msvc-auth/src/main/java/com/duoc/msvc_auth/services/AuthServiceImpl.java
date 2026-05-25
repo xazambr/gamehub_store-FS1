@@ -4,6 +4,7 @@ import com.duoc.msvc_auth.exceptions.AuthExceptions;
 import com.duoc.msvc_auth.models.CuentaAcceso;
 import com.duoc.msvc_auth.repositories.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private AuthRepository authRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     @Override
@@ -43,6 +47,9 @@ public class AuthServiceImpl implements AuthService {
         if (this.authRepository.findById(cuentaAcceso.getId()).isPresent()) {
             throw new AuthExceptions("La cuenta con id: " + cuentaAcceso.getId() + " ya existe");
         }
+        String passwordSec = passwordEncoder.encode(cuentaAcceso.getPasswordHash());
+        cuentaAcceso.setPasswordHash(passwordSec);
+
         return this.authRepository.save(cuentaAcceso);
     }
 
@@ -54,6 +61,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public CuentaAcceso UpdateById(Long id, CuentaAcceso cuentaAcceso) {
-        return null;
+        return this.authRepository.findById(id).map(element-> {
+            element.setPasswordHash(cuentaAcceso.getPasswordHash());
+            element.setEmail(cuentaAcceso.getEmail());
+            element.setRol(cuentaAcceso.getRol());
+            return  this.authRepository.save(element);
+                }).orElseThrow(
+                () -> new AuthExceptions("La cuenta con id: " + id + " no existe")
+        );
     }
 }

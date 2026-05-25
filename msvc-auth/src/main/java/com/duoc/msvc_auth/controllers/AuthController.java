@@ -47,4 +47,11 @@ public class AuthController {
                 .body(this.authService.save(usuario));
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteById(@RequestParam Long id) {
+        this.authService.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }
