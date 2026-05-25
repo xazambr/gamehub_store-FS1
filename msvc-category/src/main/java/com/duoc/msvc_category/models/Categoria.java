@@ -21,7 +21,7 @@ public class Categoria {
     private Long id;
 
     @NotBlank(message = "El campo nombre no puede ser vacio")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     @NotBlank(message = "El campo descripcion no puede ser vacio")
@@ -31,5 +31,8 @@ public class Categoria {
     @NotBlank(message = "El campo estado no puede ser vacio")
     @Column(nullable = false)
     private String estado;
+
+    @Embedded
+    Audit audit = new Audit();
 
 }
