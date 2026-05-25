@@ -48,8 +48,8 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public CuentaAcceso save(CuentaAcceso cuentaAcceso) {
-        if (this.authRepository.findById(cuentaAcceso.getId()).isPresent()) {
-            throw new AuthExceptions("La cuenta con id: " + cuentaAcceso.getId() + " ya existe");
+        if (this.authRepository.findByEmail(cuentaAcceso.getEmail()).isPresent()) {
+            throw new AuthExceptions("La cuenta con email: " + cuentaAcceso.getEmail() + " ya existe");
         }
         String passwordSec = passwordEncoder.encode(cuentaAcceso.getPasswordHash());
         cuentaAcceso.setPasswordHash(passwordSec);

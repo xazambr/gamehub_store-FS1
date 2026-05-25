@@ -28,9 +28,6 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public Inventario save(Inventario inventario) {
-        if(this.inventoryRepository.findById(inventario.getId()).isPresent()) {
-            throw new InventoryExceptions("Objeto con id: " +  inventario.getId() + " ya existe");
-        }
         return this.inventoryRepository.save(inventario);
     }
 

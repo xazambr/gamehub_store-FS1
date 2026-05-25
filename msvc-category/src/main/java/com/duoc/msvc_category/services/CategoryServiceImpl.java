@@ -32,9 +32,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public Categoria save(Categoria categoria) {
-        if(this.categoryRepository.findById(categoria.getId()).isPresent()) {
-            throw new CategoryExceptions("el usuario de id: " + categoria.getId() + " ya  existe");
-        }
         return this.categoryRepository.save(categoria);
     }
 

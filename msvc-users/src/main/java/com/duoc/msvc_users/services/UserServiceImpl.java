@@ -40,8 +40,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Usuario save(Usuario usuario) {
-        if (this.userRepository.findById(usuario.getId()).isPresent()) {
-            throw new UserExceptions("El usuario con id: "+usuario.getId()+ " ya existe");
+        if (this.userRepository.findByEmail(usuario.getEmail()).isPresent()) {
+            throw new UserExceptions("El usuario con email: "+usuario.getEmail()+ " ya existe");
         }
         return this.userRepository.save(usuario);
     }
