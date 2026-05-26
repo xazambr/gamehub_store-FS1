@@ -52,8 +52,16 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public Usuario UpdateById(Long id, Usuario usuario) {
-        return null;
+        return this.userRepository.findById(id).map(element-> {
+            element.setNombre(usuario.getNombre());
+            element.setEmail(usuario.getEmail());
+            element.setTelefono(usuario.getTelefono());
+            return this.userRepository.save(element);
+        }).orElseThrow(
+                () -> new UserExceptions("La cuenta con id: " + id + " no existe")
+        );
     }
 }

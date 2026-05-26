@@ -2,6 +2,7 @@ package com.duoc.msvc_auth.controllers;
 
 import com.duoc.msvc_auth.models.CuentaAcceso;
 import com.duoc.msvc_auth.services.AuthService;
+import com.duoc.msvc_users.models.Usuario;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,5 +54,10 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CuentaAcceso> updateById(@PathVariable Long id, @Valid @RequestBody CuentaAcceso cuenta) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.authService.UpdateById(id, cuenta));
     }
 }

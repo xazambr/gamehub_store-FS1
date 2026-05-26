@@ -3,6 +3,7 @@ package com.duoc.msvc_category.services;
 import com.duoc.msvc_category.exceptions.CategoryExceptions;
 import com.duoc.msvc_category.models.Categoria;
 import com.duoc.msvc_category.repositories.CategoryRepository;
+import com.duoc.msvc_users.exceptions.UserExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Categoria updateById(Long id, Categoria categoria) {
-        return null;
+        return this.categoryRepository.findById(id).map(element-> {
+            element.setNombre(categoria.getNombre());
+            element.setDescripcion(categoria.getDescripcion());
+            return this.categoryRepository.save(element);
+        }).orElseThrow(
+                () -> new UserExceptions("La categoria con id: " + id + " no existe")
+        );
+
     }
 }

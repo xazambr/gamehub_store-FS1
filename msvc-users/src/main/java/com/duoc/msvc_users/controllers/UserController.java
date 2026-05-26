@@ -39,5 +39,10 @@ public class UserController {
                 .body(this.userService.save(usuario));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> updateById(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.UpdateById(id, usuario));
+    }
+
 
 }

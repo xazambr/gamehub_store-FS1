@@ -2,6 +2,7 @@ package com.duoc.msvc_inventory.controllers;
 
 import com.duoc.msvc_inventory.models.Inventario;
 import com.duoc.msvc_inventory.services.InventoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,11 @@ public class InventoryController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Inventario> updateById(@PathVariable Long id, @Valid @RequestBody Inventario inventario) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.inventoryService.updateById(id, inventario));
     }
 
 }

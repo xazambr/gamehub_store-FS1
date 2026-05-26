@@ -63,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
         this.authRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public CuentaAcceso UpdateById(Long id, CuentaAcceso cuentaAcceso) {
         return this.authRepository.findById(id).map(element-> {
@@ -74,4 +75,5 @@ public class AuthServiceImpl implements AuthService {
                 () -> new AuthExceptions("La cuenta con id: " + id + " no existe")
         );
     }
+
 }

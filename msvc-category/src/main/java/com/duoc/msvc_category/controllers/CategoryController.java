@@ -2,6 +2,7 @@ package com.duoc.msvc_category.controllers;
 
 import com.duoc.msvc_category.models.Categoria;
 import com.duoc.msvc_category.services.CategoryService;
+import com.duoc.msvc_users.models.Usuario;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,5 +47,9 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Categoria> updateById(@PathVariable Long id, @Valid @RequestBody Categoria categoria) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.categoryService.updateById(id, categoria));
+    }
 
 }
