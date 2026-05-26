@@ -37,9 +37,9 @@ public class CuentaAcceso {
     @Column(nullable = false)
     private String rol;
 
-    @NotBlank
+    @NotBlank(message = "El campo activo no puede ser vacio")
     @Column
-    private boolean activo;
+    private String estado;
 
     @Column
     @CreatedDate
