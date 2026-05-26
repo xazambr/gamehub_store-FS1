@@ -11,6 +11,7 @@ server-port de cada microservicio:
 - payments: 8086
 - shipping: 8087
 - notifications: 8088
+- promotions: 8089
 
 dependencias:
 
