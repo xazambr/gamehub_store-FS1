@@ -32,6 +32,7 @@
         <module>msvc-orders</module>
         <module>msvc-payments</module>
         <module>msvc-shipping</module>
+        <module>msvc-promotion</module>
     </modules>
 
 </project>
