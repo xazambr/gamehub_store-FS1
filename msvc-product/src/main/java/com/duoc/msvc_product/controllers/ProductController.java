@@ -2,6 +2,7 @@ package com.duoc.msvc_product.controllers;
 
 import com.duoc.msvc_product.models.Producto;
 import com.duoc.msvc_product.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,19 @@ public class ProductController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(productService.save(producto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> updateById(@PathVariable Long id, @Valid @RequestBody Producto producto) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.productService.UpdateById(id, producto));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteById(@RequestParam Long id) {
+        this.productService.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
 

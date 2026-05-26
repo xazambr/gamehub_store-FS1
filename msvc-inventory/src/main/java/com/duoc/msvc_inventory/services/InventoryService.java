@@ -11,6 +11,6 @@ public interface InventoryService {
     Inventario findById(Long id);
     Inventario save(Inventario inventario);
     void deleteById(Long id);
-    Inventario update(Inventario inventario);
+    Inventario updateById(Long id, Inventario inventario);
 
 }

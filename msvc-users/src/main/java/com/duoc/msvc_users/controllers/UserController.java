@@ -44,5 +44,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.UpdateById(id, usuario));
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteById(@RequestParam Long id) {
+        this.userService.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
 
 }
