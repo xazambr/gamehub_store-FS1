@@ -27,14 +27,14 @@ public class AuthController {
                 .body(this.authService.findAll());
     }
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CuentaAcceso> findById(@PathVariable long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(this.authService.findById(id));
     }
 
-    @GetMapping("{/email}")
+    @GetMapping("/{email}")
     public ResponseEntity<CuentaAcceso> findByEmail(@PathVariable String email) {
         return ResponseEntity
                 .status(HttpStatus.OK)
