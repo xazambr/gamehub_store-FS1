@@ -1,8 +1,11 @@
 package com.duoc.msvc_inventory.services;
 
+import com.duoc.msvc_inventory.clients.ProductClient;
 import com.duoc.msvc_inventory.exceptions.InventoryExceptions;
 import com.duoc.msvc_inventory.models.Inventario;
+import com.duoc.msvc_inventory.models.dtos.ExtProductoDTO;
 import com.duoc.msvc_inventory.repositories.InventoryRepository;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,9 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Autowired
     private InventoryRepository inventoryRepository;
+
+    @Autowired
+    private ProductClient productClient;
 
     @Override
     public List<Inventario> findAll() {
@@ -28,6 +34,15 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public Inventario save(Inventario inventario) {
+        try {
+            ExtProductoDTO producto = productClient.findById(inventario.getProductoId());
+
+        } catch (FeignException.NotFound e) {
+            throw new InventoryExceptions("El producto con ID " + inventario.getProductoId()+ " no existe en el sistema.");
+        }
+
+
+
         return this.inventoryRepository.save(inventario);
     }
 

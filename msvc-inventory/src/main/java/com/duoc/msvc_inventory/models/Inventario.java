@@ -22,6 +22,9 @@ public class Inventario {
     @Column(name="categoria:_id")
     private Long id;
 
+    @Column
+    private Long productoId;
+
     @NotNull(message = "El campo stock disponible no puede ser vacio")
     @Column
     @Min(value = 1, message = "el stock disponible no puede ser negativo")
