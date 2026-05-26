@@ -35,12 +35,12 @@ public class Producto {
     private String modelo;
 
     @NotNull(message = "El cambo precio no puede ser nulo")
-    @Column(nullable = false)
+    @Column
     @Min(value = 1, message = "El valor debe ser mayor a cero")
     private int precio;
 
-    //conectar despues con categoria service
-    //private String categoriaId;
+    @Column(nullable = false)
+    private Long categoriaId;
 
     @Column(nullable = false)
     private String descripcion;

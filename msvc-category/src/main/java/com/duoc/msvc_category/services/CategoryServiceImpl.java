@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Categoria findById(Long id) {
         return this.categoryRepository.findById(id).orElseThrow(
-                () -> new CategoryExceptions("el usuario de id: " + id + " no existe")
+                () -> new CategoryExceptions("La categoria de id: " + id + " no existe")
         );
     }
 

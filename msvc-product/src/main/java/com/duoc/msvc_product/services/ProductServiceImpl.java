@@ -1,9 +1,12 @@
 package com.duoc.msvc_product.services;
 
+import com.duoc.msvc_product.clients.CategoryClient;
 import com.duoc.msvc_product.exceptions.ProductExceptions;
 import com.duoc.msvc_product.models.Producto;
+import com.duoc.msvc_product.models.dtos.ExtCategoriaDTO;
 import com.duoc.msvc_product.repositories.ProductRepository;
 import com.duoc.msvc_users.exceptions.UserExceptions;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryClient categoryClient;
 
     @Transactional(readOnly = true)
     @Override
@@ -33,6 +39,18 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Producto save(Producto producto) {
+        try {
+            ExtCategoriaDTO categoria = categoryClient.findById(producto.getCategoriaId());
+
+            // Regla de negocio extra: Controlar que la categoría no esté inactiva [cite: 124]
+            if ("INACTIVO".equals(categoria.getEstado())) {
+                throw new ProductExceptions("La categoría asociada se encuentra inactiva");
+            }
+        } catch (FeignException.NotFound e) {
+            throw new ProductExceptions("La categoría con ID " + producto.getCategoriaId() + " no existe en el sistema.");
+        }
+
+
         return productRepository.save(producto);
     }
 
