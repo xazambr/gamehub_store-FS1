@@ -33,9 +33,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Producto save(Producto producto) {
-        if(this.productRepository.findById(producto.getId()).isPresent()) {
-            throw new ProductExceptions("Producto con id: " + producto.getId() + " ya existe");
-        }
         return productRepository.save(producto);
     }
 
