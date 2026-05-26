@@ -1,7 +1,9 @@
 package com.duoc.msvc_product.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,8 +34,9 @@ public class Producto {
     @Column(nullable = false)
     private String modelo;
 
-    @NotBlank(message = "El cambo precio no puede ser vacio")
+    @NotNull(message = "El cambo precio no puede ser nulo")
     @Column(nullable = false)
+    @Min(value = 1, message = "El valor debe ser mayor a cero")
     private int precio;
 
     //conectar despues con categoria service
