@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+//conexion con msvc-users usando FeignClient
+
 @FeignClient(name="msvc-users", url = "localhost:8081/api/v1/usuarios")
 public interface UsuarioClient {
     @GetMapping("/{id}")

@@ -42,8 +42,8 @@ public class ProductServiceImpl implements ProductService {
         try {
             ExtCategoriaDTO categoria = categoryClient.findById(producto.getCategoriaId());
 
-            // Regla de negocio extra: Controlar que la categoría no esté inactiva [cite: 124]
-            if ("INACTIVO".equals(categoria.getEstado())) {
+            // Regla de negocio extra: Controlar que la categoría no esté inactiva
+            if ("DESACTIVADO".equals(categoria.getEstado())) {
                 throw new ProductExceptions("La categoría asociada se encuentra inactiva");
             }
         } catch (FeignException.NotFound e) {

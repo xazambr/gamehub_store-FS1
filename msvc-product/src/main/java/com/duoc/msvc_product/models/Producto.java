@@ -47,6 +47,6 @@ public class Producto {
 
     @NotBlank(message = "El cambo estado no puede ser vacio")
     @Column(nullable = false)
-    private  String estado;
+    private  String estado; // "ACTIVADO", "DESACTIVADO"
 
 }
