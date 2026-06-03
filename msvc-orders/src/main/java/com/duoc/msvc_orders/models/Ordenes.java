@@ -41,21 +41,12 @@ public class Ordenes {
     @Column(nullable = false)
     private Double total;
 
-    @NotNull(message = "La fecha de creación no puede ser nula")
     @Column(nullable = false, updatable = false)
-    private LocalDateTime fechCreacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
 
-    @Column(name = "empresa_transporte")
-    private String empresaTransporte;
-
-    @Column(name = "numero_seguimiento")
-    private String numeroSeguimiento;
-
-    @Column(name = "motivo_cancelacion")
-    private String motivoCancelacion;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "orden_juegos", joinColumns = @JoinColumn(name = "id_orden"))
