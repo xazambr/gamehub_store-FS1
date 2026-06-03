@@ -44,7 +44,7 @@ public class OrdenesServiceImpl implements OrdersService {
     @Override
     public Ordenes crear(Ordenes orden) {
         orden.setEstado("creada");
-        orden.setFechCreacion(LocalDateTime.now());
+        orden.setFechaCreacion(LocalDateTime.now());
 
         if (orden.getTotal() == null) {
             orden.setTotal(0.0);
@@ -73,7 +73,6 @@ public class OrdenesServiceImpl implements OrdersService {
         Ordenes ordenExistente = this.ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + id));
 
         ordenExistente.setEstado("cancelada");
-        ordenExistente.setMotivoCancelacion(motivo);
         ordenExistente.setFechaActualizacion(LocalDateTime.now());
         return this.ordersRepository.save(ordenExistente);
     }
