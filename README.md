@@ -5,6 +5,7 @@ server-port de cada microservicio:
 - auth: 8080:
 - user: 8081
     endpoint: /api/v1/usuarios
+
         GET /api/v1/usuarios: Lista de todos los usuarios 
         GET /api/v1/usuarios/{id}: muestra el usuario con el id indicado
         POST /api/v1/usuarios: Crea un usuario, se requieres los siguientes parametros:
