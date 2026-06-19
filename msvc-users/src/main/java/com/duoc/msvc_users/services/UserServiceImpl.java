@@ -29,14 +29,6 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Usuario findByEmail(String email) {
-        return this.userRepository.findByEmail(email).orElseThrow(
-                () -> new UserExceptions("El usuario con email: "+email+ " no existe")
-        );
-    }
-
     @Transactional
     @Override
     public Usuario save(Usuario usuario) {

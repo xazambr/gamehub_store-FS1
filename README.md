@@ -21,6 +21,9 @@ server-port de cada microservicio:
         DELETE /api/v1/usuarios/{id}: elimina el usuario con el id seleccionado
 
 - product: 8082
+  endpoint /api/v1/productos
+
+
 - category: 8083
 - inventory: 8084
 - order: 8085
