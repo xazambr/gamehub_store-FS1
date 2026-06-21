@@ -1,0 +1,101 @@
+spring:
+  application:
+    name: msvc-gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          # Cada ruta: si la URL entra por el patron 'predicates', el gateway la reenvia
+          # a 'uri'. lb:// significa "busca este nombre en Eureka y balancea la carga".
+          routes:
+            - id: msvc-auth
+              uri: lb://msvc-auth
+              predicates:
+                - Path=/api/v1/auth/**,/api/v2/auth/**
+            - id: msvc-users
+              uri: lb://msvc-users
+              predicates:
+                - Path=/api/v1/usuarios/**,/api/v2/usuarios/**
+            - id: msvc-product
+              uri: lb://msvc-product
+              predicates:
+                - Path=/api/v1/productos/**,/api/v2/productos/**
+            - id: msvc-category
+              uri: lb://msvc-category
+              predicates:
+                - Path=/api/v1/categorias/**,/api/v2/categorias/**
+            - id: msvc-inventory
+              uri: lb://msvc-inventory
+              predicates:
+                - Path=/api/v1/inventario/**,/api/v2/inventario/**
+
+            # Rutas para el OpenAPI (JSON) de cada microservicio. El Swagger UI del gateway
+            # las consume. Usan el prefijo /api-docs/<svc> (NO /v3/api-docs) para no chocar con
+            # el /v3/api-docs propio del gateway. RewritePath lo traduce al /v3/api-docs real del servicio.
+            - id: auth-api-docs
+              uri: lb://msvc-auth
+              predicates:
+                - Path=/api-docs/auth
+              filters:
+                - RewritePath=/api-docs/auth, /v3/api-docs
+            - id: usuarios-api-docs
+              uri: lb://msvc-users
+              predicates:
+                - Path=/api-docs/usuarios
+              filters:
+                - RewritePath=/api-docs/usuarios, /v3/api-docs
+            - id: productos-api-docs
+              uri: lb://msvc-product
+              predicates:
+                - Path=/api-docs/productos
+              filters:
+                - RewritePath=/api-docs/productos, /v3/api-docs
+            - id: categorias-api-docs
+              uri: lb://msvc-category
+              predicates:
+                - Path=/api-docs/categorias
+              filters:
+                - RewritePath=/api-docs/categorias, /v3/api-docs
+            - id: inventario-api-docs
+              uri: lb://msvc-invetory
+              predicates:
+                - Path=/api-docs/inventario
+              filters:
+                - RewritePath=/api/docs/inventario, /v3/api-docs
+
+# Punto de entrada unico: todo el trafico entra por aqui.
+server:
+  port: 8080
+
+# El gateway tambien es cliente Eureka para poder resolver los lb://
+eureka:
+  server:
+  # Desactiva el modo de autoprotección
+    enable-self-preservation: false
+  # Frecuencia con la que busca servicios caídos para borrarlos (en milisegundos)
+    eviction-interval-timer-in-ms: 2000
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Swagger UI agregado: una sola pagina con un desplegable para elegir el microservicio.
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs/swagger-ui.html
+    # El desplegable apunta a los docs de cada servicio (ruteados por el gateway via lb://).
+    urls:
+      - name: auth
+        url: /api-docs/auth
+      - name: users
+        url: /api-docs/usuarios
+      - name: product
+        url: /api-docs/productos
+      - name: category
+        url: /api-docs/categorias
+      - name: inventory
+        url: /api-docs/inventario
+
+# CLAVE SECRETA JWT: la MISMA que en msvc-usuarios y en los 3 microservicios. El gateway la usa para validar.
+jwt:
+  secret: clave-secreta-super-segura-para-jwt-gamehub-msvc-duoc-2026-0616

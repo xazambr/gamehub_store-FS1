@@ -7,6 +7,8 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/msvc-auth/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-eureka/pom.xml" />
       </list>
     </option>
   </component>

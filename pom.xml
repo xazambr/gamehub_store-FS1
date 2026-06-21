@@ -33,6 +33,8 @@
         <module>msvc-payments</module>
         <module>msvc-shipping</module>
         <module>msvc-promotion</module>
+        <module>msvc-eureka</module>
+        <module>msvc-gateway</module>
     </modules>
 
 </project>
