@@ -49,8 +49,6 @@ public class ProductServiceImpl implements ProductService {
         } catch (FeignException.NotFound e) {
             throw new ProductExceptions("La categoría con ID " + producto.getCategoriaId() + " no existe en el sistema.");
         }
-
-
         return productRepository.save(producto);
     }
 
