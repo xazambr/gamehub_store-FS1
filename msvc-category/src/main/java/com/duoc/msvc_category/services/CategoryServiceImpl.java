@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
             element.setDescripcion(categoria.getDescripcion());
             return this.categoryRepository.save(element);
         }).orElseThrow(
-                () -> new UserExceptions("La categoria con id: " + id + " no existe")
+                () -> new CategoryExceptions("La categoria con id: " + id + " no existe")
         );
 
     }
