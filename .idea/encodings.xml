@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-category/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-inventory/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-notifications/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-orders/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-payments/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-product/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-promotion/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-shipping/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/msvc-users/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gamehub_store-FS1-projecto/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-auth/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-category/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msvc-inventory/src/main/java" charset="UTF-8" />
@@ -13,8 +25,5 @@
     <file url="file://$PROJECT_DIR$/msvc-users/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
-    <file url="file://$USER_HOME$/msvc-auth/src/main/java" charset="UTF-8" />
-    <file url="file://$USER_HOME$/src/main/java" charset="UTF-8" />
-    <file url="file://$USER_HOME$/src/main/resources" charset="UTF-8" />
   </component>
 </project>
