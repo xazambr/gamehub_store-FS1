@@ -8,14 +8,10 @@ spring:
           # Cada ruta: si la URL entra por el patron 'predicates', el gateway la reenvia
           # a 'uri'. lb:// significa "busca este nombre en Eureka y balancea la carga".
           routes:
-            - id: msvc-auth
-              uri: lb://msvc-auth
-              predicates:
-                - Path=/api/v1/auth/**,/api/v2/auth/**
             - id: msvc-users
               uri: lb://msvc-users
               predicates:
-                - Path=/api/v1/usuarios/**,/api/v2/usuarios/**
+                - Path=/api/v1/auth/**,/api/v1/usuarios/**
             - id: msvc-product
               uri: lb://msvc-product
               predicates:
@@ -28,14 +24,30 @@ spring:
               uri: lb://msvc-inventory
               predicates:
                 - Path=/api/v1/inventario/**,/api/v2/inventario/**
+            - id: msvc-orders
+              uri: lb://msvc-orders
+              predicates:
+                - Path=/api/v1/orden/**
+            - id: msvc-payments
+              uri: lb://msvc-payments
+              predicates:
+                  - Path=/api/v1/pago/**
+            - id: msvc-shipping
+              uri: lb://msvc-shipping
+              predicates:
+                - Path=/api/v1/shipping/**
+            - id: msvc-notifications
+              uri: lb://msvc-notificacions
+              predicates:
+                - Path=/api/v1/notifications/**
+            - id: msvc-promotions
+              uri: lb://msvc-promotions
+              predicates:
+                - Path=/api/v1/promotions/**
 
             # Rutas para el OpenAPI (JSON) de cada microservicio. El Swagger UI del gateway
             # las consume. Usan el prefijo /api-docs/<svc> (NO /v3/api-docs) para no chocar con
             # el /v3/api-docs propio del gateway. RewritePath lo traduce al /v3/api-docs real del servicio.
-            - id: auth-api-docs
-              uri: lb://msvc-auth
-              predicates:
-                - Path=/api-docs/auth
               filters:
                 - RewritePath=/api-docs/auth, /v3/api-docs
             - id: usuarios-api-docs
@@ -62,7 +74,36 @@ spring:
                 - Path=/api-docs/inventario
               filters:
                 - RewritePath=/api/docs/inventario, /v3/api-docs
-
+            - id: orden-api-docs
+              uri: lb://msvc-orders
+              predicates:
+                - Path=/api-docs/orden
+              filters:
+                - RewritePath=/api/docs/orden, /v3/api-docs
+            - id: pago-api-docs
+              uri: lb://msvc-payments
+              predicates:
+                - Path=/api-docs/pago
+              filters:
+                - RewritePath=/api/docs/pago, /v3/api-docs
+            - id: shipping-api-docs
+              uri: lb://msvc-shipping
+              predicates:
+                - Path=/api-docs/shipping
+              filters:
+                - RewritePath=/api/docs/shipping, /v3/api-docs
+            - id: notifications-api-docs
+              uri: lb://msvc-notifications
+              predicates:
+                - Path=/api-docs/notifications
+              filters:
+                - RewritePath=/api/docs/notifications, /v3/api-docs
+            - id: promotions-api-docs
+              uri: lb://msvc-promotions
+              predicates:
+                - Path=/api-docs/promotions
+              filters:
+                - RewritePath=/api/docs/promotions, /v3/api-docs
 # Punto de entrada unico: todo el trafico entra por aqui.
 server:
   port: 8080
@@ -95,6 +136,17 @@ springdoc:
         url: /api-docs/categorias
       - name: inventory
         url: /api-docs/inventario
+      - name: orders
+        url: /api-docs/orders
+      - name: payments
+        url: /api-docs/pago
+      - name: shipping
+        url: /api-docs/shipping
+      - name: notifications
+        url: /api-docs/notifications
+      - name: promotions
+        url: /api-docs/promotions
+
 
 # CLAVE SECRETA JWT: la MISMA que en msvc-usuarios y en los 3 microservicios. El gateway la usa para validar.
 jwt:

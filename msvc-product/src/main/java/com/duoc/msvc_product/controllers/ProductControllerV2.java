@@ -4,7 +4,7 @@ import com.duoc.msvc_product.assemblers.ProductModelAssembler;
 import com.duoc.msvc_product.models.Producto;
 import com.duoc.msvc_product.models.dtos.ProductoDTO;
 import com.duoc.msvc_product.services.ProductService;
-import com.duoc.msvc_users.models.dtos.UsuarioDTO;
+import com.duoc.msvc_users.dtos.UsuarioDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

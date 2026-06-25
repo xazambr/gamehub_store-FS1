@@ -1,7 +1,7 @@
 package com.duoc.msvc_users.controllers;
 
 import com.duoc.msvc_users.models.Usuario;
-import com.duoc.msvc_users.models.dtos.UsuarioDTO;
+import com.duoc.msvc_users.dtos.UsuarioDTO;
 import com.duoc.msvc_users.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -2,8 +2,7 @@ package com.duoc.msvc_auth.controllers;
 
 import com.duoc.msvc_auth.models.CuentaAcceso;
 import com.duoc.msvc_auth.services.AuthService;
-import com.duoc.msvc_users.models.Usuario;
-import com.duoc.msvc_users.models.dtos.UsuarioDTO;
+import com.duoc.msvc_users.dtos.UsuarioDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

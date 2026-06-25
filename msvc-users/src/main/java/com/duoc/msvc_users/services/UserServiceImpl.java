@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario UpdateById(Long id, Usuario usuario) {
         return this.userRepository.findById(id).map(element-> {
-            element.setNombre(usuario.getNombre());
+            element.setUsername(usuario.getUsername());
             element.setEmail(usuario.getEmail());
             element.setTelefono(usuario.getTelefono());
             return this.userRepository.save(element);
