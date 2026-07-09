@@ -58,7 +58,7 @@ public class CategoryServiceTest {
     @DisplayName("Deberia listar todas las categorias")
     public void ShouldListAllCategories() {
 
-        // Arrange
+        // ARRANGE
         List<Categoria> categorias = this.categoriaList;
         categorias.add(this.categoriaPrueba);
         when(this.categoryRepository.findAll()).thenReturn(categorias);

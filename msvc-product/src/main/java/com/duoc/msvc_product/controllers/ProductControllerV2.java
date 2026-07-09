@@ -85,7 +85,7 @@ public class ProductControllerV2 {
     }
 
     @PostMapping
-    @Operation(summary = "Guardado de producti", description = "Esta es la forma de guardar un producto")
+    @Operation(summary = "Guardado de producto", description = "Esta es la forma de guardar un producto")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "producto a crear", required = true,
             content = @Content(schema = @Schema(implementation = UsuarioDTO.class))

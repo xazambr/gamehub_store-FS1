@@ -45,8 +45,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Categoria updateById(Long id, Categoria categoria) {
         return this.categoryRepository.findById(id).map(element-> {
+            element.setId(id);
             element.setNombre(categoria.getNombre());
             element.setDescripcion(categoria.getDescripcion());
+            element.setEstado(categoria.getEstado());
             return this.categoryRepository.save(element);
         }).orElseThrow(
                 () -> new CategoryExceptions("La categoria con id: " + id + " no existe")

@@ -55,7 +55,8 @@ public class CategoryController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = CategoriaDTO.class)
                     )),
-            @ApiResponse(responseCode = "404", description = "Categoria no se encuentra en la BD")
+            @ApiResponse(responseCode = "404", description = "Categoria no se encuentra en la BD"),
+            @ApiResponse(responseCode = "400", description = "Bad Request")
     })
     public ResponseEntity<Categoria> findById(
             @Parameter(description = "Id de la categoria a buscar", required = true, example = "1")
