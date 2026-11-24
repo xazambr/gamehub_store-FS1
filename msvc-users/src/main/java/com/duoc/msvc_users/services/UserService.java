@@ -43,9 +43,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "El usuario ya existe");
         }
 
-        // 2) Si el cliente no indico roles, se asigna PACIENTE por defecto.
+        // 2) Si el cliente no indico roles, se asigna CLIENTE por defecto.
         Set<String> nombresRoles = (request.getRoles() == null || request.getRoles().isEmpty())
-                ? Set.of("ROLE_PACIENTE")
+                ? Set.of("ROLE_CLIENTE")
                 : request.getRoles();
 
         // 3) Buscar cada rol en la BD. Si piden un rol que no existe, se rechaza (400).

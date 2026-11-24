@@ -24,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Registrar usuario", description = "Crea un usuario y devuelve su token. Roles validos: ROLE_ADMIN, ROLE_MEDICO, ROLE_PACIENTE")
+    @Operation(summary = "Registrar usuario", description = "Crea un usuario y devuelve su token. Roles validos: ROLE_ADMIN, ROLE_CLIENTE, ROLE_OPERADOR")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.register(request));
     }

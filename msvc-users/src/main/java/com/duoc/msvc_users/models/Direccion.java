@@ -20,19 +20,19 @@ public class Direccion {
     @Column(name = "direccion_id")
     private long id;
 
-    @NotBlank(message = "El cambo comuna no puede ser vacio")
+    @NotBlank(message = "El campo comuna no puede ser vacio")
     @Column(nullable = false)
     private String comuna;
 
-    @NotBlank(message = "El cambo ciudad no puede ser vacio")
+    @NotBlank(message = "El campo ciudad no puede ser vacio")
     @Column(nullable = false)
     private String ciudad;
 
-    @NotBlank(message = "El cambo calle no puede ser vacio")
+    @NotBlank(message = "El campo calle no puede ser vacio")
     @Column(nullable = false)
     private String calle;
 
-    @NotBlank(message = "El cambo numero no puede ser vacio")
+    @NotBlank(message = "El campo numero no puede ser vacio")
     @Column(nullable = false)
     private String numero;
 

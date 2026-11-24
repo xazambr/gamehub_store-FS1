@@ -121,7 +121,7 @@ springdoc:
     # El desplegable apunta a los docs de cada servicio (ruteados por el gateway via lb://).
     urls:
       - name: usuarios
-        url: /api-docs/usuarios
+        url: /api-docs/users
       - name: producto
         url: /api-docs/productos
       - name: categorias
