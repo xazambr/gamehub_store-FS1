@@ -8,22 +8,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+// Solo documenta el cuerpo esperado en Swagger.
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 public class InventarioDTO {
+    @NotNull(message = "El producto es obligatorio")
+    private Long productoId;
+
     @NotNull(message = "El campo stock disponible no puede ser vacio")
-    @Min(value = 1, message = "el stock disponible no puede ser negativo")
-    private int stockDisponible;
+    @Min(value = 0, message = "el stock disponible no puede ser negativo")
+    private Integer stockDisponible;
 
     @NotNull(message = "El campo stock reservado no puede ser vacio")
-    @Min(value = 1, message = "el stock reservado no puede ser negativo")
-    private int stockReservado;
+    @Min(value = 0, message = "el stock reservado no puede ser negativo")
+    private Integer stockReservado;
 
     @NotNull(message = "El campo stock minimo no puede ser vacio")
-    @Min(value = 1, message = "el stock minimo no puede ser negativo")
-    private int stockMinimo;
+    @Min(value = 0, message = "el stock minimo no puede ser negativo")
+    private Integer stockMinimo;
 
     @NotBlank(message = "El campo ubicacion no puede ser vacio")
     private String ubicacion;

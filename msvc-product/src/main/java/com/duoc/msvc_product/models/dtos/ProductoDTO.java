@@ -28,7 +28,7 @@ public class ProductoDTO {
         @Min(value = 1, message = "El valor debe ser mayor a cero")
         private int precio;
 
-        @Column(nullable = false)
+        @NotBlank(message = "La descripcion no puede ser nulo")
         private String descripcion;
 
         @NotBlank(message = "El cambo estado no puede ser vacio")

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 // Tabla de roles. El nombre se guarda con el prefijo ROLE_ (convencion de Spring Security):
-// ROLE_ADMIN, ROLE_MEDICO, ROLE_PACIENTE.
+// ROLE_ADMIN, ROLE_OPERADOR, ROLE_CLIENTE.
 @Entity
 @Table(name = "roles")
 @Getter

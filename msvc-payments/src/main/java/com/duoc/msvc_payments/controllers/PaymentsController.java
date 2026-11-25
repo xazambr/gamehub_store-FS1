@@ -1,43 +1,64 @@
 package com.duoc.msvc_payments.controllers;
 
+import com.duoc.msvc_payments.dtos.PaymentDTO;
+import com.duoc.msvc_payments.assemblers.PaymentAssembler;
 import com.duoc.msvc_payments.models.Pagos;
 import com.duoc.msvc_payments.services.PagosService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/pago")
+@Tag(name = "Pagos V1", description = "Endpoints para la gestión y procesamiento de transacciones")
 public class PaymentsController {
 
     @Autowired
     private PagosService pagosService;
 
+    @Autowired
+    private PaymentAssembler assembler;
+
     @PostMapping
-    public ResponseEntity<Pagos> procesarPago(@Valid @RequestBody Pagos pago) {
+    @Operation(summary = "Procesar un nuevo pago")
+    public ResponseEntity<EntityModel<PaymentDTO>> procesarPago(@Valid @RequestBody Pagos pago) {
         Pagos nuevoPago = this.pagosService.procesarPago(pago);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPago);
+        return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(nuevoPago));
     }
 
     @GetMapping
-    public ResponseEntity<List<Pagos>> listarTodos() {
-        List<Pagos> lista = this.pagosService.listarTodos();
-        return ResponseEntity.status(HttpStatus.OK).body(lista);
+    @Operation(summary = "Ver historial de todos los pagos")
+    public ResponseEntity<CollectionModel<EntityModel<PaymentDTO>>> listarTodos() {
+        List<EntityModel<PaymentDTO>> lista = this.pagosService.listarTodos().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(lista,
+                linkTo(methodOn(PaymentsController.class).listarTodos()).withSelfRel()));
     }
 
-    // Buscar una transacción por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Pagos> obtenerPorId(@PathVariable Long id) {
-        return this.pagosService.buscarPorId(id).map(pago -> ResponseEntity.status(HttpStatus.OK).body(pago)).orElse(ResponseEntity.notFound().build());
+    @Operation(summary = "Buscar una transacción por ID")
+    public ResponseEntity<EntityModel<PaymentDTO>> obtenerPorId(@PathVariable Long id) {
+        return this.pagosService.buscarPorId(id)
+                .map(pago -> ResponseEntity.ok(assembler.toModel(pago)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Buscar si una orden de compra ya tiene el pago registrado
     @GetMapping("/orden/{ordenId}")
-    public ResponseEntity<Pagos> obtenerPorOrdenId(@PathVariable Long ordenId) {
-        return this.pagosService.buscarPorOrdenId(ordenId).map(pago -> ResponseEntity.status(HttpStatus.OK).body(pago)).orElse(ResponseEntity.notFound().build());
+    @Operation(summary = "Buscar pago por ID de la orden")
+    public ResponseEntity<EntityModel<PaymentDTO>> obtenerPorOrdenId(@PathVariable Long ordenId) {
+        return this.pagosService.buscarPorOrdenId(ordenId)
+                .map(pago -> ResponseEntity.ok(assembler.toModel(pago)))
+                .orElse(ResponseEntity.notFound().build());
     }
 }

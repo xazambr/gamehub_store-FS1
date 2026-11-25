@@ -6,6 +6,6 @@ public interface PromotionService {
     // Guarda un nuevo cupón
     Promociones crearPromocion(Promociones promotion);
 
-    // Aplicada el cupón
+    // Aplicar el cupón
     Double aplicarDescuento(String codigo, Double totalOrden);
 }

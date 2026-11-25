@@ -6,6 +6,7 @@
 		<groupId>org.grupo22</groupId>
 		<artifactId>mcsvs-gamehub</artifactId>
 		<version>1.0-SNAPSHOT</version>
+
 	</parent>
 	<groupId>com.duoc</groupId>
 	<artifactId>msvc-eureka</artifactId>

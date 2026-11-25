@@ -2,6 +2,7 @@ package com.duoc.msvc_orders.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,7 @@ public class Ordenes {
     @Column(nullable = false)
     private Long usuarioId;
 
-    @NotNull(message = "El estado no puede ser nulo")
+    // Lo asigna el servicio ("creada"); no debe exigirse en el cuerpo de la peticion.
     @Column(nullable = false)
     private String estado; // creada, pagada, enviada, cancelada
 
@@ -48,10 +49,13 @@ public class Ordenes {
     private LocalDateTime fechaActualizacion;
 
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    // Cada aparicion de un id equivale a 1 unidad (ej: [3,3,5] = 2 del juego 3 y 1 del juego 5).
+    @NotEmpty(message = "La orden debe incluir al menos un juego")
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "orden_juegos", joinColumns = @JoinColumn(name = "id_orden"))
     @Column(name = "id_juego")
     private List<Long> juegosIds;
+
 
 
 }

@@ -31,7 +31,7 @@ public class JwtService {
         List<String> roles = usuario.getRoles().stream().map(Rol::getNombre).toList();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer("msvc-users")                       // quien emitio el token
+                .issuer("msvc-usuarios")                       // quien emitio el token
                 .issuedAt(ahora)                               // cuando
                 .expiresAt(ahora.plus(expirationMinutes, ChronoUnit.MINUTES)) // hasta cuando vale
                 .subject(usuario.getUsername())                // a quien pertenece

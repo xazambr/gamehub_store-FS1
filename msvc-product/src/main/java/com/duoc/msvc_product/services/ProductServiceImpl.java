@@ -5,7 +5,6 @@ import com.duoc.msvc_product.exceptions.ProductExceptions;
 import com.duoc.msvc_product.models.Producto;
 import com.duoc.msvc_product.models.dtos.ExtCategoriaDTO;
 import com.duoc.msvc_product.repositories.ProductRepository;
-import com.duoc.msvc_users.exceptions.UserExceptions;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,8 +48,6 @@ public class ProductServiceImpl implements ProductService {
         } catch (FeignException.NotFound e) {
             throw new ProductExceptions("La categoría con ID " + producto.getCategoriaId() + " no existe en el sistema.");
         }
-
-
         return productRepository.save(producto);
     }
 
@@ -70,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
             element.setDescripcion(producto.getDescripcion());
             return this.productRepository.save(element);
         }).orElseThrow(
-                () -> new UserExceptions("La producto con id: " + id + " no existe")
+                () -> new ProductExceptions("La producto con id: " + id + " no existe")
         );
     }
 }

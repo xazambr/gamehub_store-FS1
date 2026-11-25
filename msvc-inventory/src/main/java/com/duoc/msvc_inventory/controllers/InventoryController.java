@@ -1,12 +1,12 @@
 package com.duoc.msvc_inventory.controllers;
 
 import com.duoc.msvc_inventory.models.Inventario;
+import com.duoc.msvc_inventory.models.MovimientoInventario;
 import com.duoc.msvc_inventory.models.dtos.InventarioDTO;
 import com.duoc.msvc_inventory.services.InventoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -73,7 +73,7 @@ public class InventoryController {
     @ApiResponse(responseCode = "201",
             description = "inventario creado"
     )
-    public ResponseEntity<Inventario> save(@RequestBody Inventario inventario) {
+    public ResponseEntity<Inventario> save(@Valid @RequestBody Inventario inventario) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(this.inventoryService.save(inventario));
@@ -102,6 +102,36 @@ public class InventoryController {
             @PathVariable Long id,
             @Valid @RequestBody Inventario inventario) {
         return ResponseEntity.status(HttpStatus.OK).body(this.inventoryService.updateById(id, inventario));
+    }
+
+    @GetMapping("/producto/{productoId}")
+    @Operation(summary = "Inventario de un producto", description = "Busca el inventario por id de producto")
+    public ResponseEntity<Inventario> findByProductoId(@PathVariable Long productoId) {
+        return ResponseEntity.ok(this.inventoryService.findByProductoId(productoId));
+    }
+
+    @GetMapping("/movimientos/{productoId}")
+    @Operation(summary = "Movimientos de un producto", description = "Bitacora de ingresos, reservas, liberaciones y salidas")
+    public ResponseEntity<List<MovimientoInventario>> movimientos(@PathVariable Long productoId) {
+        return ResponseEntity.ok(this.inventoryService.movimientos(productoId));
+    }
+
+    @PostMapping("/reservas/{productoId}/reservar")
+    @Operation(summary = "Reservar stock", description = "Mueve unidades de disponible a reservado. 409 si no alcanza el stock")
+    public ResponseEntity<Inventario> reservar(@PathVariable Long productoId, @RequestParam int cantidad) {
+        return ResponseEntity.ok(this.inventoryService.reservar(productoId, cantidad));
+    }
+
+    @PostMapping("/reservas/{productoId}/liberar")
+    @Operation(summary = "Liberar stock reservado", description = "Devuelve unidades de reservado a disponible (orden cancelada)")
+    public ResponseEntity<Inventario> liberar(@PathVariable Long productoId, @RequestParam int cantidad) {
+        return ResponseEntity.ok(this.inventoryService.liberar(productoId, cantidad));
+    }
+
+    @PostMapping("/reservas/{productoId}/confirmar")
+    @Operation(summary = "Confirmar salida de stock", description = "Descuenta definitivamente lo reservado (orden enviada)")
+    public ResponseEntity<Inventario> confirmar(@PathVariable Long productoId, @RequestParam int cantidad) {
+        return ResponseEntity.ok(this.inventoryService.confirmar(productoId, cantidad));
     }
 
 }

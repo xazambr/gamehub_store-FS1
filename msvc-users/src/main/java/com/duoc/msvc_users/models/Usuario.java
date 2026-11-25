@@ -24,30 +24,19 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usuario_id")
-    private Long id;
+    private Long usuarioId;
 
-    @NotBlank(message = "El cambo nombre no puede ser vacio")
-    @Column(nullable = false)
+    @NotBlank
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @NotBlank(message = "El campo email no puede ser vacio")
-    @Email(message = "El campo de correo tiene que tener el formato de correo")
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @NotBlank(message = "El campo password no puede ser vacio")
+    // Se guarda CIFRADA con BCrypt, nunca en texto plano.
+    @NotBlank
     @Column(nullable = false)
     private String password;
 
-    @NotBlank(message = "El campo telefono no puede ser vacio")
-    @Column(nullable = false)
-    @Pattern(regexp = "^[0-9]{8,15}$", message = "El teléfono debe contener entre 8 y 15 dígitos")
-    private String telefono;
-
-    @NotBlank(message = "El campo estado no puede ser vacio")
-    @Column(nullable = false)
-    private String estado;
-
+    // Relacion muchos-a-muchos: un usuario tiene varios roles y un rol lo comparten varios usuarios.
+    // Se crea una tabla intermedia 'usuario_roles' con las dos llaves foraneas.
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_roles",
@@ -55,9 +44,6 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
     private Set<Rol> roles = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Direccion> direcciones;
 
     @Embedded
     Audit audit = new Audit();
