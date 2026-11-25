@@ -91,11 +91,11 @@ public class InventoryControllerV2 {
     @ApiResponse(responseCode = "201",
             description = "inventario creado"
     )
-    public ResponseEntity<EntityModel<Inventario>> save(@RequestBody Inventario inventario) {
+    public ResponseEntity<EntityModel<Inventario>> save(@Valid @RequestBody Inventario inventario) {
         Inventario inventarioCreate = this.inventoryService.save(inventario);
         EntityModel<Inventario> entityModel = this.inventoryModelAssembler.toModel(inventarioCreate);
 
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
     @DeleteMapping

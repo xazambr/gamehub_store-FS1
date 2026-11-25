@@ -49,4 +49,7 @@ public class Producto {
     @Column(nullable = false)
     private  String estado; // "ACTIVADO", "DESACTIVADO"
 
+    @Column(name = "imagen_url", length = 500)
+    private String imagenUrl;
+
 }

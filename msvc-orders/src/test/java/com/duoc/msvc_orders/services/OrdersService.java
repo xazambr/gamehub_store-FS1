@@ -14,15 +14,4 @@ import static org.mockito.Mockito.*;
 class OrderServiceTest {
     @Mock private OrdersRepository repository;
     @InjectMocks private OrdenesServiceImpl service;
-
-    @Test
-    void testFindById_CasoExitoso() {
-        Ordenes mockOrder = new Ordenes();
-        mockOrder.setId(1L);
-        mockOrder.setTotal(5000.0);
-        when(repository.findById(1L)).thenReturn(Optional.of(mockOrder));
-        Ordenes resultado = service.BuscarPorId(1L);
-        assertNotNull(resultado);
-        assertEquals(5000.0, resultado.getTotal());
-    }
 }

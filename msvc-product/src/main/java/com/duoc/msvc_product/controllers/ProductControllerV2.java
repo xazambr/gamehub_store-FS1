@@ -4,7 +4,6 @@ import com.duoc.msvc_product.assemblers.ProductModelAssembler;
 import com.duoc.msvc_product.models.Producto;
 import com.duoc.msvc_product.models.dtos.ProductoDTO;
 import com.duoc.msvc_product.services.ProductService;
-import com.duoc.msvc_users.dtos.UsuarioDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -88,7 +87,7 @@ public class ProductControllerV2 {
     @Operation(summary = "Guardado de producto", description = "Esta es la forma de guardar un producto")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "producto a crear", required = true,
-            content = @Content(schema = @Schema(implementation = UsuarioDTO.class))
+            content = @Content(schema = @Schema(implementation = ProductoDTO.class))
     )
     @ApiResponse(responseCode = "201",
             description = "Usuario creado",

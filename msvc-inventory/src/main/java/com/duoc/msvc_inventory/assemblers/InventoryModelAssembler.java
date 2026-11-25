@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+// Faltaba @Component: InventoryControllerV2 lo inyecta y la aplicacion NO arrancaba.
+@Component
 public class InventoryModelAssembler implements RepresentationModelAssembler<Inventario, EntityModel<Inventario>> {
 
     @Override
@@ -16,7 +18,5 @@ public class InventoryModelAssembler implements RepresentationModelAssembler<Inv
                 inventario,
                 linkTo(methodOn(InventoryControllerV2.class).findById(inventario.getId())).withSelfRel(),
                 linkTo(methodOn(InventoryControllerV2.class).findAll()).withRel("inventario"));
-
     }
 }
-

@@ -34,4 +34,6 @@ public class ProductoDTO {
         @NotBlank(message = "El cambo estado no puede ser vacio")
         private  String estado; // "ACTIVADO", "DESACTIVADO"
 
+        private String imagenUrl;
+
 }

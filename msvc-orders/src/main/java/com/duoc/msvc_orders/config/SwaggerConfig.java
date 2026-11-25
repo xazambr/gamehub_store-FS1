@@ -17,9 +17,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenApi(){
         return new OpenAPI()
                 .info(new Info()
-                        .title("API Promociones")
+                        .title("API Ordenes")
                         .version("1.0")
-                        .description("Documentación de la API de gestión de Promociones")
+                        .description("Documentación de la API de gestión de Ordenes")
                 )
                 .components(new Components().addSecuritySchemes(ESQUEMA,
                         new SecurityScheme()

@@ -17,11 +17,11 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
-// Seguridad del microservicio de pacientes.
+// Seguridad del microservicio de ordenes.
 //
 // Es un "Resource Server": no emite tokens (eso lo hace msvc-usuarios), solo recibe peticiones con un
 // JWT en "Authorization: Bearer <token>", verifica que sea valido y autoriza segun el rol.
-// Funciona como segunda barrera: protege el servicio aunque alguien llame directo al puerto 8000.
+// Funciona como segunda barrera: protege el servicio aunque alguien llame directo al puerto 8006.
 @Configuration
 public class SecurityConfig {
 
@@ -37,7 +37,7 @@ public class SecurityConfig {
         return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
     }
 
-    // Convierte el claim "roles" del token (ej: ["ROLE_PACIENTE"]) en authorities para hasRole(...).
+    // Convierte el claim "roles" del token (ej: ["ROLE_ADMIN"]) en authorities para hasRole(...).
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authorities = new JwtGrantedAuthoritiesConverter();
@@ -55,13 +55,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // Las reglas se evaluan EN ORDEN; la primera que coincide gana.
                 .authorizeHttpRequests(auth -> auth
-                        // Documentacion y consola h2 abiertas para la demo.
                         .requestMatchers("/docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
-                        // LEER pacientes (GET): cualquier rol autenticado. Va antes que la regla de escritura.
-                        .requestMatchers(HttpMethod.GET, "/api/v1/pacientes/**")
+                        // Consultar ordenes: cualquier rol autenticado.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orden/**", "/api/v2/orden/**")
                         .hasAnyRole("ADMIN", "OPERADOR", "CLIENTE")
-                        // ESCRIBIR pacientes (POST/PUT/DELETE): solo ADMIN o MEDICO.
-                        .requestMatchers("/api/v1/pacientes/**")
+                        // Crear y cancelar una orden: tambien el CLIENTE.
+                        .requestMatchers(HttpMethod.POST, "/api/v1/orden", "/api/v1/orden/*/cancelar")
+                        .hasAnyRole("ADMIN", "OPERADOR", "CLIENTE")
+                        // Cambiar estado (pagada, enviada...): solo personal.
+                        .requestMatchers("/api/v1/orden/**", "/api/v2/orden/**")
                         .hasAnyRole("ADMIN", "OPERADOR")
                         .anyRequest().authenticated())
                 // Sin sesion en el servidor: cada peticion se autentica con su propio token.

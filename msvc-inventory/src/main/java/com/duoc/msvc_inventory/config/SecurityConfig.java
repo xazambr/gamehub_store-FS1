@@ -17,32 +17,26 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
-// Seguridad del microservicio de pacientes.
-//
-// Es un "Resource Server": no emite tokens (eso lo hace msvc-usuarios), solo recibe peticiones con un
-// JWT en "Authorization: Bearer <token>", verifica que sea valido y autoriza segun el rol.
-// Funciona como segunda barrera: protege el servicio aunque alguien llame directo al puerto 8000.
+// Seguridad del microservicio de inventario (Resource Server JWT).
+// Valida el token emitido por msvc-users y autoriza segun el rol.
 @Configuration
 public class SecurityConfig {
 
-    // Misma clave secreta con la que msvc-usuarios firmo el token; sirve para verificar la firma.
     @Value("${jwt.secret}")
     private String secret;
 
-    // Verifica en cada peticion que la firma del token sea correcta y que no este vencido (claim exp).
-    // HS256 es simetrico: la misma clave firma y verifica.
     @Bean
     public JwtDecoder jwtDecoder() {
         SecretKey key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
     }
 
-    // Convierte el claim "roles" del token (ej: ["ROLE_PACIENTE"]) en authorities para hasRole(...).
+    // Convierte el claim "roles" (ej: ["ROLE_ADMIN"]) en authorities para hasRole(...).
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authorities = new JwtGrantedAuthoritiesConverter();
-        authorities.setAuthoritiesClaimName("roles"); // claim de donde leer los roles
-        authorities.setAuthorityPrefix("");           // sin prefijo: ya vienen como "ROLE_..."
+        authorities.setAuthoritiesClaimName("roles");
+        authorities.setAuthorityPrefix("");
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(authorities);
         return converter;
@@ -51,24 +45,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationConverter converter) throws Exception {
         http
-                // API sin estado (token en cada request): CSRF no aplica, se desactiva.
                 .csrf(csrf -> csrf.disable())
-                // Las reglas se evaluan EN ORDEN; la primera que coincide gana.
+                // Se evaluan EN ORDEN; la primera que coincide gana.
                 .authorizeHttpRequests(auth -> auth
-                        // Documentacion y consola h2 abiertas para la demo.
                         .requestMatchers("/docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
-                        // LEER pacientes (GET): cualquier rol autenticado. Va antes que la regla de escritura.
-                        .requestMatchers(HttpMethod.GET, "/api/v1/pacientes/**")
+                        // Consultar inventario: cualquier rol autenticado.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/inventario/**", "/api/v2/inventario/**")
                         .hasAnyRole("ADMIN", "OPERADOR", "CLIENTE")
-                        // ESCRIBIR pacientes (POST/PUT/DELETE): solo ADMIN o MEDICO.
-                        .requestMatchers("/api/v1/pacientes/**")
+                        // Reservar/liberar/confirmar stock: lo invoca msvc-orders con el token de quien
+                        // crea o cancela la orden (incluye CLIENTE).
+                        .requestMatchers(HttpMethod.POST, "/api/v1/inventario/reservas/**")
+                        .hasAnyRole("ADMIN", "OPERADOR", "CLIENTE")
+                        // Crear, editar y borrar inventario: solo personal.
+                        .requestMatchers("/api/v1/inventario/**", "/api/v2/inventario/**")
                         .hasAnyRole("ADMIN", "OPERADOR")
                         .anyRequest().authenticated())
-                // Sin sesion en el servidor: cada peticion se autentica con su propio token.
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Activa la validacion del JWT con el decoder y el conversor de roles.
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(converter)))
-                // Permite ver la consola h2 (usa frames) en el navegador.
                 .headers(h -> h.frameOptions(f -> f.disable()));
         return http.build();
     }

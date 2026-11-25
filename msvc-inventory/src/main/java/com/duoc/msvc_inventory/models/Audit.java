@@ -2,8 +2,6 @@ package com.duoc.msvc_inventory.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +9,8 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+// Los callbacks @PrePersist/@PreUpdate NO se ejecutan dentro de un @Embeddable; por eso
+// aqui solo van los campos y la entidad Inventario es quien los invoca.
 @Embeddable
 @Getter
 @Setter
@@ -24,15 +24,11 @@ public class Audit {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
-    @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
 
-
-    @PreUpdate
-    public void preUpdate(){
+    public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 }
