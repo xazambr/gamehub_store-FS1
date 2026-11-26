@@ -1,12 +1,10 @@
 FROM maven:3-eclipse-temurin-21 AS build
-ARG MODULO
 WORKDIR /app
 COPY . .
-RUN mvn -B -pl ${MODULO} -am package -DskipTests
+RUN mvn -B package -DskipTests
 
 FROM eclipse-temurin:21-jre
-ARG MODULO
 WORKDIR /app
-COPY --from=build /app/${MODULO}/target/*.jar app.jar
+COPY --from=build /app/msvc-*/target/*.jar ./
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70"
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar ${MODULO}-*.jar"]
