@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 //conexion con msvc-category usando FeignClient
 
-@FeignClient(name = "msvc-category", url = "localhost:8083/api/v1/categorias" )
+@FeignClient(name = "msvc-category", url = "localhost:8003/api/v1/categorias" )
 public interface CategoryClient {
 
     @GetMapping("/{id}")
