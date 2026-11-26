@@ -1,0 +1,66 @@
+package com.duoc.msvc_payments.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.web.SecurityFilterChain;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+
+@Configuration
+public class SecurityConfig {
+
+    // Misma clave secreta con la que msvc-usuarios firmo el token; sirve para verificar la firma.
+    @Value("${jwt.secret}")
+    private String secret;
+
+    // Verifica en cada peticion que la firma del token sea correcta y que no este vencido (claim exp).
+    // HS256 es simetrico: la misma clave firma y verifica.
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        SecretKey key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
+    }
+
+    // Convierte el claim "roles" del token (ej: ["ROLE_ADMIN"]) en authorities para hasRole(...).
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter authorities = new JwtGrantedAuthoritiesConverter();
+        authorities.setAuthoritiesClaimName("roles"); // claim de donde leer los roles
+        authorities.setAuthorityPrefix("");           // sin prefijo: ya vienen como "ROLE_..."
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(authorities);
+        return converter;
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationConverter converter) throws Exception {
+        http
+                // API sin estado (token en cada request): CSRF no aplica, se desactiva.
+                .csrf(csrf -> csrf.disable())
+                // Las reglas se evaluan EN ORDEN; la primera que coincide gana.
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/actuator/health", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/ordenes/**", "/api/v1/pagos/**").hasAnyRole("CLIENTE", "OPERADOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/ordenes/**", "/api/v1/pagos/**").hasAnyRole("CLIENTE", "OPERADOR", "ADMIN")
+                        .requestMatchers("/api/v1/ordenes/**", "/api/v1/pagos/**").hasAnyRole("OPERADOR", "ADMIN")
+                        .anyRequest().authenticated())
+                // Sin sesion en el servidor: cada peticion se autentica con su propio token.
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Activa la validacion del JWT con el decoder y el conversor de roles.
+                .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(converter)))
+                // Permite ver la consola h2 (usa frames) en el navegador.
+                .headers(h -> h.frameOptions(f -> f.disable()));
+        return http.build();
+    }
+}

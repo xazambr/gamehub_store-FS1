@@ -55,14 +55,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // Las reglas se evaluan EN ORDEN; la primera que coincide gana.
                 .authorizeHttpRequests(auth -> auth
-                        // Documentacion y consola h2 abiertas para la demo.
-                        .requestMatchers("/docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
-                        // LEER pacientes (GET): cualquier rol autenticado. Va antes que la regla de escritura.
-                        .requestMatchers(HttpMethod.GET, "/api/v1/pacientes/**")
-                        .hasAnyRole("ADMIN", "OPERADOR", "CLIENTE")
-                        // ESCRIBIR pacientes (POST/PUT/DELETE): solo ADMIN o MEDICO.
-                        .requestMatchers("/api/v1/pacientes/**")
-                        .hasAnyRole("ADMIN", "OPERADOR")
+                        .requestMatchers("/docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/actuator/health", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categorias/**", "/api/v1/promociones/**").permitAll()
+                        .requestMatchers("/api/v1/categorias/**", "/api/v1/promociones/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 // Sin sesion en el servidor: cada peticion se autentica con su propio token.
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
