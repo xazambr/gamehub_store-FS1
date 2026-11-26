@@ -3,7 +3,6 @@ package com.duoc.msvc_category.services;
 import com.duoc.msvc_category.exceptions.CategoryExceptions;
 import com.duoc.msvc_category.models.Categoria;
 import com.duoc.msvc_category.repositories.CategoryRepository;
-import com.duoc.msvc_users.exceptions.UserExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
