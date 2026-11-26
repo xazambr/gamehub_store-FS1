@@ -1,24 +1,12 @@
-FROM maven:3.9.13-eclipse-temurin-21-noble AS build
-WORKDIR /workspace
-ARG MODULE
-
-COPY pom.xml ./
-COPY ${MODULE}/pom.xml ${MODULE}/pom.xml
-COPY ${MODULE}/src ${MODULE}/src
-
-RUN --mount=type=cache,target=/root/.m2/repository \
-    mvn -B -f "${MODULE}/pom.xml" -DskipTests package \
-    && cp "${MODULE}"/target/*.jar /gamehub.jar
-
-FROM eclipse-temurin:21-jre-noble
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd --gid 10001 gamehub \
-    && useradd --uid 10001 --gid gamehub --no-create-home gamehub \
-    && install -d -o gamehub -g gamehub /app/data
-
+FROM maven:3-eclipse-temurin-21 AS build
+ARG MODULO
 WORKDIR /app
-COPY --from=build /gamehub.jar ./gamehub.jar
-USER gamehub
-ENTRYPOINT ["java", "-jar", "/app/gamehub.jar"]
+COPY . .
+RUN mvn -B -pl ${MODULO} -am package -DskipTests
+
+FROM eclipse-temurin:21-jre
+ARG MODULO
+WORKDIR /app
+COPY --from=build /app/${MODULO}/target/*.jar app.jar
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70"
+ENTRYPOINT ["java", "-jar", "app.jar"]
