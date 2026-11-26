@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,20 +17,25 @@ public class ShippingServiceImpl implements ShippingService {
     @Autowired
     private ShippingRepository repository;
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<Envio> findAll() {
+        List<Envio> lista = new ArrayList<>();
+        this.repository.findAll().forEach(lista::add);
+        return lista;
+    }
+
     @Transactional
     @Override
     public Envio registrarDespacho(Envio envio) {
         envio.setEstadoEnvio("PENDIENTE");
         envio.setFechaDespacho(LocalDateTime.now());
 
-        // primero guardamos
         Envio envioGuardadoInicial = this.repository.save(envio);
 
-        // creamos un código de seguimiento: "TRACK-" + el ID de la tabla
         String codigoSimple = "TRACK-" + envioGuardadoInicial.getId();
         envioGuardadoInicial.setNumeroSeguimiento(codigoSimple);
 
-        // vuelve a guardar
         return this.repository.save(envioGuardadoInicial);
     }
 
@@ -41,7 +48,8 @@ public class ShippingServiceImpl implements ShippingService {
     @Transactional
     @Override
     public Envio actualizarEstado(Long id, String nuevoEstado) {
-        Envio envioExistente = this.repository.findById(id).orElseThrow(() -> new RuntimeException("Error: No existe el envío con ID " + id));
+        Envio envioExistente = this.repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Error: No existe el envío con ID " + id));
 
         envioExistente.setEstadoEnvio(nuevoEstado);
 

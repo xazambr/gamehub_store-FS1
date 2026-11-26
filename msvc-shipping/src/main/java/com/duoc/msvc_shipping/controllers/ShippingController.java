@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/shipping")
 public class ShippingController {
@@ -15,6 +17,10 @@ public class ShippingController {
     @Autowired
     private ShippingService service;
 
+    @GetMapping
+    public ResponseEntity<List<Envio>> findAll() {
+        return ResponseEntity.ok(this.service.findAll());
+    }
 
     @PostMapping
     public ResponseEntity<Envio> crearDespacho(@Valid @RequestBody Envio envio) {
@@ -22,13 +28,13 @@ public class ShippingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
-    // Busca por el ID de la orden
     @GetMapping("/orden/{ordenId}")
     public ResponseEntity<Envio> verPorOrden(@PathVariable Long ordenId) {
-        return this.service.buscarPorOrden(ordenId).map(envio -> ResponseEntity.status(HttpStatus.OK).body(envio)).orElse(ResponseEntity.notFound().build());
+        return this.service.buscarPorOrden(ordenId)
+                .map(envio -> ResponseEntity.status(HttpStatus.OK).body(envio))
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Cambia el estado
     @PutMapping("/{id}/estado")
     public ResponseEntity<Envio> cambiarEstado(@PathVariable Long id, @RequestParam String nuevoEstado) {
         Envio actualizado = this.service.actualizarEstado(id, nuevoEstado);
