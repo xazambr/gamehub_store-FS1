@@ -38,6 +38,14 @@ public class Promociones {
     private Boolean activo; // true = disponible / false = deshabilitado
 
     @NotNull(message = "La fecha de expiración es obligatoria")
+    @Column(name = "fecha_inicio", nullable = false)
+    private LocalDateTime fechaInicio;
+
+    @NotNull(message = "La fecha de expiración es obligatoria")
     @Column(name = "fecha_expiracion", nullable = false)
     private LocalDateTime fechaExpiracion;
+
+    @NotNull(message = "La fecha de expiración es obligatoria")
+    @Column(name = "tope_de_usos", nullable = false)
+    private int topeDeUsos;
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PromotionServiceImpl implements PromotionService {
@@ -43,5 +44,11 @@ public class PromotionServiceImpl implements PromotionService {
 
         // Retornamos el nuevo valor redondeado
         return Math.round(totalFinal * 100.0) / 100.0;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Promociones> listarTodas() {
+        return this.repository.findAll();
     }
 }

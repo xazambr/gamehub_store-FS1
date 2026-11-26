@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -35,10 +34,14 @@ public class PromotionController {
     private PromocionAssembler assembler;
 
     @GetMapping
-    @Operation(summary = "Listar cupones simulados", description = "Recupera una lista estructural para soporte HATEOAS")
+    @Operation(summary = "Listar cupones", description = "Recupera todos los cupones registrados en la base de datos")
     @ApiResponse(responseCode = "200", description = "Búsqueda exitosa")
     public ResponseEntity<CollectionModel<EntityModel<PromocionDTO>>> listarTodas() {
-        List<EntityModel<PromocionDTO>> promotions = new ArrayList<>();
+        List<EntityModel<PromocionDTO>> promotions = this.service.listarTodas()
+                .stream()
+                .map(assembler::toModel)
+                .toList();
+
         return ResponseEntity.ok(CollectionModel.of(promotions,
                 linkTo(methodOn(PromotionController.class).listarTodas()).withSelfRel()));
     }
@@ -53,7 +56,6 @@ public class PromotionController {
             @PathVariable String codigo,
             @RequestParam Double total) {
 
-        // Llamamos al método exacto de tu compañero: aplicarDescuento
         Double totalConDescuento = this.service.aplicarDescuento(codigo, total);
 
         Map<String, Object> respuesta = new HashMap<>();
@@ -69,7 +71,6 @@ public class PromotionController {
     @Operation(summary = "Crear nuevo cupón", description = "Registra un beneficio en el sistema")
     @ApiResponse(responseCode = "201", description = "Cupón creado exitosamente")
     public ResponseEntity<EntityModel<PromocionDTO>> guardarCupon(@Valid @RequestBody Promociones promotion) {
-        // Llamamos al método exacto de tu compañero: crearPromocion
         Promociones creado = this.service.crearPromocion(promotion);
         return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(creado));
     }
