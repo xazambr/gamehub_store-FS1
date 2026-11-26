@@ -61,4 +61,15 @@ public class PaymentsController {
                 .map(pago -> ResponseEntity.ok(assembler.toModel(pago)))
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar el estado de un pago")
+    public ResponseEntity<Pagos> actualizarEstado(
+            @PathVariable Long id,
+            @RequestBody java.util.Map<String, String> body) {
+        String nuevoEstado = body.getOrDefault("estado", "COMPLETADO");
+        return this.pagosService.actualizarEstado(id, nuevoEstado)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

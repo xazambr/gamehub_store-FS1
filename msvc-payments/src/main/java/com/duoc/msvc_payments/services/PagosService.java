@@ -13,4 +13,6 @@ public interface PagosService {
     Optional<Pagos> buscarPorOrdenId(Long ordenId);
 
     Pagos procesarPago(Pagos pago);
+
+    Optional<Pagos> actualizarEstado(Long id, String nuevoEstado);
 }

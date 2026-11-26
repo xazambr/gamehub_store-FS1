@@ -48,4 +48,13 @@ public class PagosServiceImpl implements PagosService {
     public Optional<Pagos> buscarPorOrdenId(Long ordenId) {
         return this.paymentsRepository.findByOrdenId(ordenId);
     }
+
+    @Transactional
+    @Override
+    public Optional<Pagos> actualizarEstado(Long id, String nuevoEstado) {
+        return this.paymentsRepository.findById(id).map(pago -> {
+            pago.setEstado(nuevoEstado);
+            return this.paymentsRepository.save(pago);
+        });
+    }
 }
