@@ -34,7 +34,8 @@ public class JwtService {
                 .issuer("msvc-usuarios")                       // quien emitio el token
                 .issuedAt(ahora)                               // cuando
                 .expiresAt(ahora.plus(expirationMinutes, ChronoUnit.MINUTES)) // hasta cuando vale
-                .subject(usuario.getUsername())                // a quien pertenece
+                .subject(usuario.getUsername())     // a quien pertenece
+                .claim("usuarioId", usuario.getUsuarioId())
                 .claim("roles", roles)                         // permisos
                 .build();
 
