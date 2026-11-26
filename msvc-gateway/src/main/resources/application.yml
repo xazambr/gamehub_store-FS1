@@ -31,15 +31,15 @@ spring:
             - id: msvc-orders
               uri: lb://msvc-orders
               predicates:
-                - Path=/api/v1/orden/**,/api/v2/orden/**
+                - Path=/api/v1/orden/**,/api/v1/ordenes/**,/api/v2/orden/**
             - id: msvc-payments
               uri: lb://msvc-payments
               predicates:
-                - Path=/api/v1/pago/**,/api/v2/pago/**
+                - Path=/api/v1/pago/**,/api/v1/pagos/**,/api/v2/pago/**
             - id: msvc-shipping
               uri: lb://msvc-shipping
               predicates:
-                - Path=/api/v1/shipping/**,/api/v2/shipping/**
+                - Path=/api/v1/shipping/**,/api/v1/envios/**,/api/v2/shipping/**
             - id: msvc-promotion
               uri: lb://msvc-promotion
               predicates:

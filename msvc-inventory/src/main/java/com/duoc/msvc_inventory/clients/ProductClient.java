@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 // Se resuelve por Eureka (msvc-product, puerto 8002). Antes apuntaba fijo a localhost:8082 (puerto
 // del README antiguo), donde no hay nada. Para forzar una URL: clients.product.url=http://localhost:8002
-@FeignClient(name = "msvc-product", url = "${clients.product.url:}", path = "/api/v1/productos")
+@FeignClient(name = "msvc-product", url = "http://localhost:8002/api/v1/productos")
 public interface ProductClient {
 
     @GetMapping("/{id}")

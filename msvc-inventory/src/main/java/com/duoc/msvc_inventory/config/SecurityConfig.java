@@ -48,17 +48,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // Se evaluan EN ORDEN; la primera que coincide gana.
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
-                        // Consultar inventario: cualquier rol autenticado.
-                        .requestMatchers(HttpMethod.GET, "/api/v1/inventario/**", "/api/v2/inventario/**")
-                        .hasAnyRole("ADMIN", "OPERADOR", "CLIENTE")
-                        // Reservar/liberar/confirmar stock: lo invoca msvc-orders con el token de quien
-                        // crea o cancela la orden (incluye CLIENTE).
-                        .requestMatchers(HttpMethod.POST, "/api/v1/inventario/reservas/**")
-                        .hasAnyRole("ADMIN", "OPERADOR", "CLIENTE")
-                        // Crear, editar y borrar inventario: solo personal.
-                        .requestMatchers("/api/v1/inventario/**", "/api/v2/inventario/**")
-                        .hasAnyRole("ADMIN", "OPERADOR")
+                        .requestMatchers("/docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/actuator/health", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/inventario", "/api/v1/inventario/producto/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/inventario/reservas/*/reservar").hasAnyRole("CLIENTE", "OPERADOR", "ADMIN")
+                        .requestMatchers("/api/v1/inventario/**").hasAnyRole("OPERADOR", "ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(converter)))
